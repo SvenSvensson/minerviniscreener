@@ -1,0 +1,1 @@
+web: gunicorn dash_minervini_csv_cards:server
