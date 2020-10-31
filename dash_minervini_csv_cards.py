@@ -27,6 +27,8 @@ app = dash.Dash(__name__,suppress_callback_exceptions=True, external_stylesheets
 # Idea: Compare result with previous run and summarize new and old stocks
 # Idea: When checking own portfolio: Send email when own stock no longer fulfills all criteria
 
+#abc
+
 filePath1 = r"ticker_components/SvenStocks4.xlsx"
 filePath2 = r"ticker_components/ScreenOutput.xlsx"
 filePath3 = r"ticker_components/Portfolio.xlsx"
