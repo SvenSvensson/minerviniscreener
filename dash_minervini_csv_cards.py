@@ -22,14 +22,10 @@ app = dash.Dash(__name__,suppress_callback_exceptions=True, external_stylesheets
 # to a data table - with callback
 # First try with Bootstrap after watching charming data
 
-
 # Idea: Compare result with own portfolio (own 'object')
 # Idea: Exchange yahoo with different api
 # Idea: Compare result with previous run and summarize new and old stocks
 # Idea: When checking own portfolio: Send email when own stock no longer fulfills all criteria
-
-##
-##
 
 filePath1 = r"ticker_components/SvenStocks4.xlsx"
 filePath2 = r"ticker_components/ScreenOutput.xlsx"
