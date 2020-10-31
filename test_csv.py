@@ -12,6 +12,8 @@ import os
 from dash.exceptions import PreventUpdate
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.COSMO])
+server = app.server
+
 print("Hello")
 filepath = r"ticker_components/Portfolio2.csv"
 filepath2 = r"ticker_components/Portfolio.xlsx"

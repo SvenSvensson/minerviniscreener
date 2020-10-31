@@ -16,7 +16,7 @@ start = dt.datetime(2017, 12, 1)
 now = dt.datetime.now()
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.COSMO])
-
+server = app.server
 # This program runs the Mark Minvervini stockscreener.
 # It reads the symbols from a xlsx file and writes the results of the stockscreener
 # to a data table - with callback
