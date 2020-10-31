@@ -15,8 +15,8 @@ yf.pdr_override()
 start = dt.datetime(2017, 12, 1)
 now = dt.datetime.now()
 
-app = dash.Dash(__name__,suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.COSMO])
-
+app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.COSMO])
+server = app.server
 # This program runs the Mark Minvervini stockscreener.
 # It reads the symbols from a xlsx file and writes the results of the stockscreener
 # to a data table - with callback
@@ -28,16 +28,15 @@ app = dash.Dash(__name__,suppress_callback_exceptions=True, external_stylesheets
 # Idea: Compare result with previous run and summarize new and old stocks
 # Idea: When checking own portfolio: Send email when own stock no longer fulfills all criteria
 
-##
-##
+filePath1 = r"ticker_components/SvenStocks4.csv"
+filePath2 = r"ticker_components/ScreenOutput.csv"
+filePath3 = r"ticker_components/Portfolio.csv"
 
-filePath1 = r"ticker_components/SvenStocks4.xlsx"
-filePath2 = r"ticker_components/ScreenOutput.xlsx"
-filePath3 = r"ticker_components/Portfolio.xlsx"
 
 def get_stocks(filePath):
     # filePath = r"/Users/Sven/pff/Python/DashApp6bootstrap/ticker_components/SvenStocks6.xlsx"
-    stocklist = pd.read_excel(filePath)
+    #stocklist = pd.read_excel(filePath)
+    stocklist = pd.read_csv(filePath)
     exportList = pd.DataFrame(columns=[
                               'Stock', "50 Day MA", "150 Day Ma", "200 Day MA", "52 Week Low", "52 week High"])
 
@@ -60,7 +59,6 @@ def get_stocks(filePath):
             moving_average_200 = df["SMA_200"][-1]
             low_of_52week = min(df["Adj Close"][-260:])
             high_of_52week = max(df["Adj Close"][-260:])
-
 
             try:
                 moving_average_200_20 = df["SMA_200"][-20]
@@ -100,7 +98,8 @@ def get_stocks(filePath):
                 print("Cond. 5 for "+stock+" is true")
             else:
                 cond_5 = False
-            # Condition 6: Current Price is at least 30% above 52 week low (Many of the best are up 100-300% before coming out of consolidation)
+            # Condition 6: Current Price is at least 30% above 52 week low
+            # (Many of the best are up 100-300% before coming out of consolidation)
             if(currentClose >= (1.3*low_of_52week)):
                 cond_6 = True
                 print("Cond. 6 for "+stock+" is true")
@@ -114,8 +113,10 @@ def get_stocks(filePath):
                 cond_7 = False
 
             if(cond_1 and cond_2 and cond_3 and cond_4 and cond_5 and cond_6 and cond_7):
-                exportList = exportList.append({'Stock': stock, "50 Day MA": moving_average_50, "150 Day Ma": moving_average_150,
-                                                "200 Day MA": moving_average_200, "52 Week Low": low_of_52week, "52 week High": high_of_52week}, ignore_index=True)
+                exportList = exportList.append({'Stock': stock, "50 Day MA": moving_average_50,
+                                                "150 Day Ma": moving_average_150, "200 Day MA": moving_average_200,
+                                                "52 Week Low": low_of_52week,
+                                                "52 week High": high_of_52week}, ignore_index=True)
                 print("All conditions for "+stock+" are true.")
 
         except Exception:
@@ -127,9 +128,11 @@ def get_stocks(filePath):
 
 def get_stocks_portfolio(filePath):
     # filePath = r"/Users/Sven/pff/Python/DashApp6bootstrap/ticker_components/SvenStocks6.xlsx"
-    stocklist = pd.read_excel(filePath)
+    #stocklist = pd.read_excel(filePath)
+    stocklist = pd.read_csv(filePath)
     exportList = pd.DataFrame(columns=[
-                              'Stock', "50 Day MA", "150 Day Ma", "200 Day MA", "52 Week Low", "52 week High", "Cond1", "Cond2","Cond3","Cond4","Cond5","Cond6","Cond7"])
+                              'Stock', "50 Day MA", "150 Day Ma", "200 Day MA", "52 Week Low", "52 week High",
+                            "Cond1", "Cond2", "Cond3", "Cond4", "Cond5", "Cond6", "Cond7"])
 
     for i in stocklist.index:
         stock = str(stocklist["Symbol"][i])
@@ -188,7 +191,8 @@ def get_stocks_portfolio(filePath):
                 print("Cond. 5 for "+stock+" is true")
             else:
                 cond_5 = 0
-            # Condition 6: Current Price is at least 30% above 52 week low (Many of the best are up 100-300% before coming out of consolidation)
+            # Condition 6: Current Price is at least 30% above 52 week low
+            # (Many of the best are up 100-300% before coming out of consolidation)
             if(currentClose >= (1.3*low_of_52week)):
                 cond_6 = 1
                 print("Cond. 6 for "+stock+" is true")
@@ -201,7 +205,7 @@ def get_stocks_portfolio(filePath):
             else:
                 cond_7 = 0
 
-            #if(cond_1 and cond_2 and cond_3 and cond_4 and cond_5 and cond_6 and cond_7):
+            # if(cond_1 and cond_2 and cond_3 and cond_4 and cond_5 and cond_6 and cond_7):
             exportList = exportList.append({'Stock': stock, "50 Day MA": moving_average_50, "150 Day Ma": moving_average_150,
                                                 "200 Day MA": moving_average_200, "52 Week Low": low_of_52week, "52 week High": high_of_52week, "Cond1":cond_1,"Cond2":cond_2, "Cond3":cond_3,"Cond4":cond_4,"Cond5":cond_5, "Cond6":cond_6,"Cond7":cond_7}, ignore_index=True)
                 #print("All conditions for "+stock+" are true.")
@@ -213,7 +217,8 @@ def get_stocks_portfolio(filePath):
     return exportList
 
 def get_previous_run():
-    df = pd.read_excel(filePath2)
+    #df = pd.read_excel(filePath2)
+    df = pd.read_csv(filePath2)
 
     # print(df)
     return html.Div(
@@ -330,7 +335,8 @@ def get_legend():
 
 def get_portfolio():
 
-    df = pd.read_excel(filePath3)
+    #df = pd.read_excel(filePath3)
+    df = pd.read_csv(filePath3)
 
     # print(df)
     return html.Div(
@@ -472,7 +478,8 @@ def generate_html_table1(v):
     if v == None:
         raise PreventUpdate
 
-    df = pd.read_excel(filePath2)
+    #df = pd.read_excel(filePath2)
+    df = pd.read_csv(filePath2)
 
     # print(df)
     return html.Div(
@@ -544,12 +551,12 @@ def generate_html_table4(v):
         df, striped=True, bordered=True, responsive=True, hover=True)
     print(df)
 
-    newFile = os.path.dirname(filePath2)+"/ScreenOutput.xlsx"
-    print(filePath2)
-    print(newFile)
-    writer = ExcelWriter(newFile)
-    df.to_excel(writer, "Sheet1")
-    writer.save()
+    #newFile = os.path.dirname(filePath2)+"/ScreenOutput.xlsx"
+    #print(filePath2)
+    #print(newFile)
+    #writer = ExcelWriter(newFile)
+    #df.to_excel(writer, "Sheet1")
+    #writer.save()
 
     return dbc.Row(
         dbc.Card(
@@ -570,18 +577,18 @@ def generate_html_table5(v):
     #"50 Day MA", "150 Day Ma", "200 Day MA", "52 Week Low", "52 week High", "Cond1", "Cond2","Cond3","Cond4","Cond5","Cond6","Cond7"
     columns=[
         {'name': 'Stock', 'id': 'Stock', 'type': 'text'},
-        {'name': '50 Day MA', 'id': '50 Day MA', 'type': 'numeric','hideable':True},
+        {'name': '50 Day MA', 'id': '50 Day MA', 'type': 'numeric', 'hideable':True},
         {'name': '150 Day Ma', 'id': '150 Day Ma', 'type': 'numeric', 'hideable':True},
-        {'name': '200 Day MA', 'id': '200 Day MA', 'type': 'numeric','hideable':True},
-        {'name': '52 Week Low', 'id': '52 Week Low', 'type': 'numeric','hideable':True},
-        {'name': '52 week High', 'id': '52 week High', 'type': 'numeric','hideable':True},
-        {'name': 'Cond1', 'id': 'Cond1', 'type': 'numeric','hideable':True},
-        {'name': 'Cond2', 'id': 'Cond2', 'type': 'numeric','hideable':True},
-        {'name': 'Cond3', 'id': 'Cond3', 'type': 'numeric','hideable':True},
-        {'name': 'Cond4', 'id': 'Cond4', 'type': 'numeric','hideable':True},
-        {'name': 'Cond5', 'id': 'Cond5', 'type': 'numeric','hideable':True},
-        {'name': 'Cond6', 'id': 'Cond6', 'type': 'numeric','hideable':True},
-        {'name': 'Cond7', 'id': 'Cond7', 'type': 'numeric','hideable':True},
+        {'name': '200 Day MA', 'id': '200 Day MA', 'type': 'numeric', 'hideable':True},
+        {'name': '52 Week Low', 'id': '52 Week Low', 'type': 'numeric', 'hideable':True},
+        {'name': '52 week High', 'id': '52 week High', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond1', 'id': 'Cond1', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond2', 'id': 'Cond2', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond3', 'id': 'Cond3', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond4', 'id': 'Cond4', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond5', 'id': 'Cond5', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond6', 'id': 'Cond6', 'type': 'numeric', 'hideable':True},
+        {'name': 'Cond7', 'id': 'Cond7', 'type': 'numeric', 'hideable':True},
     ],
     data=df.to_dict('records'),
     style_data_conditional=[{
@@ -693,12 +700,8 @@ def generate_html_table5(v):
         }]
     )
     return dbc.Row(
-        dbc.Card(
-        table
-        )
+        dbc.Card(table)
     )
 
-## check out charming data videos
-
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server()
