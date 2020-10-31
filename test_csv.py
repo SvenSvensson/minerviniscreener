@@ -13,13 +13,15 @@ from dash.exceptions import PreventUpdate
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.COSMO])
 print("Hello")
-filepath = r"/Users/Sven/PycharmProjects/Minerviniscreener/ticker_components/Portfolio2.csv"
+filepath = r"ticker_components/Portfolio2.csv"
+filepath2 = r"ticker_components/Portfolio.xlsx"
 
 
 def get_file():
     #df = pd.read_csv(filepath)
 
-    data = pd.read_csv(filepath)
+    #data = pd.read_csv(filepath)
+    data = pd.read_excel(filepath2)
     print(data)
     df = pd.DataFrame(data, columns=['Symbol', 'Stock'])
     print(df)
