@@ -1,1 +1,1 @@
-web: gunicorn test_csv:server
+web: gunicorn dash_minervini_csv_cards:server
