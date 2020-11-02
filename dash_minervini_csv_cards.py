@@ -124,7 +124,6 @@ def get_stocks(filePath):
 
 
 def get_stocks_portfolio(filePath):
-    # filePath = r"/Users/Sven/pff/Python/DashApp6bootstrap/ticker_components/SvenStocks6.xlsx"
     stocklist = pd.read_excel(filePath)
     exportList = pd.DataFrame(columns=[
                               'Stock', "50 Day MA", "150 Day Ma", "200 Day MA", "52 Week Low", "52 week High", "Cond1", "Cond2","Cond3","Cond4","Cond5","Cond6","Cond7"])
@@ -695,8 +694,6 @@ def generate_html_table5(v):
         table
         )
     )
-
-## check out charming data videos
 
 if __name__ == '__main__':
     app.run_server(debug=True)
