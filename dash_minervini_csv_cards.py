@@ -29,7 +29,7 @@ server = app.server
 
 #abc
 
-filePath1 = r"ticker_components/SvenStocks4.xlsx"
+filePath1 = r"ticker_components/SvenStocks9.xlsx"
 filePath2 = r"ticker_components/ScreenOutput.xlsx"
 filePath3 = r"ticker_components/Portfolio.xlsx"
 
